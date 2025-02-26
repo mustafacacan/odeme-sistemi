@@ -86,14 +86,16 @@ const startPayment = async (userId, addressId, amount) => {
     }
 
     const payment = await Payment.create({
-        userId,
-        addressId,
-        conversationId: paymentResponse.conversationId,
-        price: amount,
-        paidPrice: amount,
-        iyzicoPaymentId: paymentResponse.paymentId,
-        iyzicoRawData: paymentResponse
-    });
+        userId, // kullanıcı id'si
+        addressId, // adres id'si
+        status: "success",
+        orderId : orderId, // ödeme id'si
+        conversationId: paymentResponse.conversationId, // iyzico'dan dönen conversation id
+        price: amount, // ödeme yapılacak fiyat
+        paidPrice: amount, // ödeme yapılan fiyat
+        iyzicoPaymentId: paymentResponse.paymentId,     // iyzico'dan gelen payment id
+        iyzicoRawData: paymentResponse // burada iyzico'dan gelen raw data'yı saklayacağız
+    });  // ödeme oluştur
 
     return { message: "payment successful", payment };
 }

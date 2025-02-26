@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 const { User } = require("../models");
 
 
-const register = async (fullName, email, password, phone, address) => {
+const register = async (fullName, email, password, phone, address, role) => {
     try {
         const exintingUser = await User.findOne({ where: { email } });
         if (exintingUser) {
@@ -13,7 +13,7 @@ const register = async (fullName, email, password, phone, address) => {
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
-        const user = await User.create({ fullName, email, password: hashedPassword, phone, address });
+        const user = await User.create({ fullName, email, password: hashedPassword, phone, address, role });
         const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
             expiresIn: "1h",
         });
@@ -66,7 +66,7 @@ const getUser = async (id) => {
 }
 
 
-const updateUser = async (id, fullName, email, password, phone, address) => {
+const update = async (id, fullName, email, password, phone, address) => {
     try {
         const user = await User.findOne({ where: { id } });
         if (!user) {
@@ -91,9 +91,26 @@ const updateUser = async (id, fullName, email, password, phone, address) => {
     }
 }
 
+const deleteUser = async (id) => {
+    try {
+        const user = await User.findOne({ where: { id } });
+        if (!user) {
+            return { message: "User not found" };
+        }
+
+        await user.destroy();
+
+        return { message: "User deleted successfully" };
+    }
+    catch (err) {
+        return { message: err.message };
+    }
+}
+
 module.exports = {
     register,
     login,
     getUser,
-    updateUser
+    update,
+    deleteUser
 }
