@@ -13,7 +13,7 @@ const Payment = sequelize.define("Payment", {
     },
     addressId: {
         type: DataTypes.INTEGER,
-        allowNull: true,
+        allowNull: false,
     }, // ödeme yapılacak adres
     status: {
         type: DataTypes.STRING,

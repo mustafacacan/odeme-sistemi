@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const paymentController = require('../controller/paymentController')
-const auth = require('../middleware/auth')
+const auth = require('../middlewares/verifyToken')
 
 
 router

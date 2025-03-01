@@ -29,19 +29,22 @@ const register = async (fullName, email, password, phone, address, role) => {
 
 const login = async (email, password) => {
     try {
+        // Kullanıcıyı veritabanından email ile bul
         const user = await User.findOne({ where: { email } });
+
         if (!user) {
-            return { message: "User not found" };
+            throw new Error('Kullanıcı bulunamadı');
         }
 
-        const isMatch = await bcrypt.compare(password, user.password);
-        if (!isMatch) {
-            return { message: "Invalid password" };
+        // Şifreyi doğrulama
+        const isPasswordValid = await user.validPassword(password);
+        if (!isPasswordValid) {
+            throw new Error('Geçersiz şifre');
         }
 
-        const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
-            expiresIn: "1h",
-        });
+        // Eğer şifre doğruysa, giriş başarılı
+
+        const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET);
 
         return { user, token };
     }

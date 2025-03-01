@@ -3,12 +3,12 @@ const { DataTypes } = require("sequelize");
 
 const Address = sequelize.define("Address", {
     id: {
-        type: DataTypes.UUID,
+        type: DataTypes.INTEGER,
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
     },
     userId: {
-        type: DataTypes.UUID,
+        type: DataTypes.INTEGER,
         allowNull: false,
     },
     fullName: {
